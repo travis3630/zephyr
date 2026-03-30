@@ -9,8 +9,8 @@ toolchain:
   - gnuarmemb
   - xtools
   - zephyr
-ram: 896
-flash: 512
+ram: 512
+flash: 3968
 supported:
   - adc
   - gpio
@@ -18,5 +18,7 @@ supported:
   - spi
   - counter
   - watchdog
-  - adc
   - i2s
+  - pwm
+vendor: nordic
+sysbuild: true
