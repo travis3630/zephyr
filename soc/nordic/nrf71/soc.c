@@ -44,6 +44,12 @@ LOG_MODULE_REGISTER(soc, CONFIG_SOC_LOG_LEVEL);
 
 #if !defined(CONFIG_TRUSTED_EXECUTION_NONSECURE)
 
+#define RAM00_START DT_REG_ADDR(DT_NODELABEL(ram00_sram))
+#define RAM02_START DT_REG_ADDR(DT_NODELABEL(ram02_sram))
+#define RAM03_START DT_REG_ADDR(DT_NODELABEL(ram03_sram))
+#define RAM03_END   DT_REG_ADDR(DT_NODELABEL(ram03_sram)) \
+					+ DT_REG_SIZE(DT_NODELABEL(ram03_sram))
+
 struct mpc_region_override {
 	nrf_mpc_override_config_t config;
 	uintptr_t startaddr;
@@ -95,7 +101,7 @@ struct mpc_region_override {
 
 static const struct mpc_region_override mpc00_region_overrides[] = {
 	/* Make RAM_00/01/02 (AMBIX00 + AMBIX03) accessible to all domains */
-	MPC_REGION_OVERRIDE_INIT(0x20000000, 0x200E0000, 0, 0),
+	MPC_REGION_OVERRIDE_INIT(RAM00_START, RAM03_END, 0, 0),
 	/* Make MRAM accessible to all domains */
 	MPC_REGION_OVERRIDE_INIT(0x00000000, 0x01000000, 0, 0),
 #if CONFIG_SOC_NRF71_WIFI_DAP
@@ -106,7 +112,7 @@ static const struct mpc_region_override mpc00_region_overrides[] = {
 
 static const struct mpc_region_override mpc03_region_overrides[] = {
 	/* Make RAM_02 (AMBIX03) accessible to the Wi-Fi domain for IPC */
-	MPC_REGION_OVERRIDE_INIT(0x200C0000, 0x200E0000, 0, 0),
+	MPC_REGION_OVERRIDE_INIT(RAM02_START, RAM03_END, 0, 0),
 };
 
 static void set_mpc_region_override(NRF_MPC_Type *mpc,
